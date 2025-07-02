@@ -63,8 +63,6 @@ namespace Company.Controllers
         }
         #endregion Get
 
-
-
         #region Add
         [HttpPost("Add")]
         public ActionResult Add([FromBody] CompanyDto companyDto)
@@ -84,7 +82,7 @@ namespace Company.Controllers
 
         #region GetBool
 
-        [HttpGet("Bool")]
+        [HttpGet("IsActive")]
         public IActionResult GetCompanies([FromQuery] bool? isActive = null)
         {
             var result = _companyService.GetByBool(isActive);
@@ -92,7 +90,6 @@ namespace Company.Controllers
         }
 
         #endregion GetBool
-
 
         #region update
 
@@ -113,20 +110,13 @@ namespace Company.Controllers
         #endregion update
 
         #region Delete
-        [HttpDelete("{companyId}")]
+        [HttpDelete("companyId")]
         public IActionResult Remove(int companyId)
         {
             try
             {
                 var result = _companyService.Delete(companyId);
-                if (result)
-                    return NotFound("Company not found or could not be deleted.");
-
                 return Ok($"Company with ID {companyId} was deleted successfully.");
-            }
-            catch (InvalidOperationException ex)
-            {
-                return Conflict(ex.Message);
             }
             catch (Exception ex)
             {

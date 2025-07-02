@@ -38,7 +38,15 @@ namespace Company.Repositories
             _companyDbContext.SaveChanges();
             return;
         }
+        #region Validation
+        public Category? Find(string name)
+        {
+            return _companyDbContext.Categories
+                .FirstOrDefault(x => x.CategoryName.ToLower().Trim() == name.ToLower().Trim());
+        }
+        #endregion Validation
         #endregion Add
+
 
         #region Update
         public bool Update(Category category)

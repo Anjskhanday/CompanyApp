@@ -87,7 +87,8 @@ namespace Company.Controllers
         {
             try
             {
-                return Ok(_categoriesService.Delete(Id));
+                var result = _categoriesService.Delete(Id);
+                return Ok($"Category with ID {Id} was deleted successfully.");
             }
             catch (Exception ex)
             {
@@ -95,19 +96,5 @@ namespace Company.Controllers
             }
         }
         #endregion Delete
-
-
-        //[HttpGet("GetAllData")]
-        //public ActionResult<CCPViewModel> GetAllData()
-        //{
-        //    try
-        //    {
-        //        return Ok(_categoriesService.GetALLData());
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //}
     }
 }

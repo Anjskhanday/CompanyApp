@@ -92,6 +92,35 @@ namespace Company.Migrations
                     b.ToTable("Companies");
                 });
 
+            modelBuilder.Entity("Company.Model.Employee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateOnly>("Dob")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EmployeeName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Employees");
+                });
+
             modelBuilder.Entity("Company.Model.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -144,6 +173,17 @@ namespace Company.Migrations
                     b.Navigation("Companies");
                 });
 
+            modelBuilder.Entity("Company.Model.Employee", b =>
+                {
+                    b.HasOne("Company.Model.CompanyA", "Companies")
+                        .WithMany("Employees")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Companies");
+                });
+
             modelBuilder.Entity("Company.Model.Product", b =>
                 {
                     b.HasOne("Company.Model.Category", "Categories")
@@ -163,6 +203,8 @@ namespace Company.Migrations
             modelBuilder.Entity("Company.Model.CompanyA", b =>
                 {
                     b.Navigation("Categories");
+
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

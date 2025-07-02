@@ -40,6 +40,13 @@ namespace Company.Repositories
             _companyDbContext.SaveChanges();
             return;
         }
+        #region Validation
+        public Product? Find(string name)
+        {
+            return _companyDbContext.Products
+                .FirstOrDefault(x => x.ProductName.ToLower().Trim() == name.ToLower().Trim());
+        }
+        #endregion Validation 
         #endregion Add
 
         #region Update

@@ -4,7 +4,7 @@ namespace Company.DTO
 {
     public class UpdateCompanyDto
     {
-        public int Id { get; set; }
+        public int CompanyId { get; set; }
 
         [Required(ErrorMessage = "Name is required.")]
         [StringLength(50, MinimumLength = 3)]

@@ -76,6 +76,13 @@ namespace Company.Services
             if (pro is null)
                 throw new Exception("Category not found");
 
+
+            var productDb = _productRepository.Find(Pro.Name);
+            if (productDb != null)
+            {
+                throw new Exception("Product name already exists");
+            }
+
             var product = new Product
             {
                 ProductName = Pro.Name,
@@ -98,7 +105,7 @@ namespace Company.Services
         {
             try
             {
-                var productDb = _productRepository.Get(product.Id);
+                var productDb = _productRepository.Get(product.ProductId);
                 if (productDb is null)
                 {
                     throw new Exception("Product not found");

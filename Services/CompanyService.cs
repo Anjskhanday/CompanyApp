@@ -11,7 +11,7 @@ namespace Company.Services
         private readonly CategoryRepository _categoriesRepository;
         private int categoryid;
 
-        public int categoryId { get; private set; }
+        //public int categoryId { get; set; }
 
         #endregion
 
@@ -34,8 +34,7 @@ namespace Company.Services
             var companies = _companyRepository.GetAllDetails();
 
             return companies;
-            //if (companies is null)
-            //    throw new Exception("No Company found.");
+
         }
         #endregion GetAll
 
@@ -129,7 +128,7 @@ namespace Company.Services
             var companyDb = _companyRepository.Find(Cat.Name);
             if (companyDb != null)
             {
-                throw new Exception("Company already exists.");
+                throw new Exception("Company Name already exists.");
             }
 
 
@@ -155,7 +154,7 @@ namespace Company.Services
         {
             try
             {
-                var companyDb = _companyRepository.Get(company.Id);
+                var companyDb = _companyRepository.Get(company.CompanyId);
                 if (companyDb is null)
                 {
                     throw new Exception("Company not found");
@@ -190,13 +189,11 @@ namespace Company.Services
                 throw new InvalidOperationException("Cannot delete the company because it has linked categories.");
             }
 
-
             var companyDb = _companyRepository.Get(companyId);
-            if (companyDb == null)
+            if (companyDb is null)
             {
-                throw new KeyNotFoundException($"Company with ID {companyId} not found.");
+                throw new Exception("Company not found");
             }
-
             return _companyRepository.Delete(companyDb);
         }
         #endregion Delete

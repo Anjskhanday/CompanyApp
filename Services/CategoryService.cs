@@ -9,18 +9,21 @@ namespace Company.Services
         #region Fields
         private readonly CategoryRepository _categoriesRepository;
         private readonly CompanyRepository _companyRepository;
+        private readonly ProductRepository _productRepository;
 
         #endregion
 
         #region Constructor
         public CategoryService(
            CategoryRepository categoriesRepository,
-           CompanyRepository companyRepository)
+           CompanyRepository companyRepository,
+           ProductRepository productRepository)
 
 
         {
             _categoriesRepository = categoriesRepository;
             _companyRepository = companyRepository;
+            _productRepository = productRepository;
         }
 
         #endregion
@@ -69,6 +72,13 @@ namespace Company.Services
             var company = _companyRepository.Get(Cat.CompanyId);
             if (company is null)
                 throw new InvalidOperationException("Company not found");
+
+            var categoryDb = _categoriesRepository.Find(Cat.Name);
+            if (categoryDb != null)
+            {
+                throw new Exception("Category Name already exists.");
+            }
+
             var categories = new Category
             {
                 CategoryName = Cat.Name,
@@ -88,7 +98,7 @@ namespace Company.Services
         {
             try
             {
-                var categoryDb = _categoriesRepository.Get(category.Id);
+                var categoryDb = _categoriesRepository.Get(category.CategoryId);
                 if (categoryDb is null)
                 {
                     throw new Exception("Product not found");
@@ -111,19 +121,22 @@ namespace Company.Services
         #region Delete
         public bool Delete(int categoryId)
         {
-            try
+            var linkedproducts = _productRepository.GetAll()
+                                       .Where(x => x.CategoryId == categoryId)
+                                       .ToList();
+
+            if (linkedproducts.Any())
             {
-                var categoryDb = _categoriesRepository.Get(categoryId);
-                if (categoryDb is null)
-                {
-                    throw new Exception("category not found");
-                }
-                return _categoriesRepository.Delete(categoryDb);
+                throw new InvalidOperationException("Cannot delete the category because it has linked products.");
             }
-            catch
+
+            var categoryDb = _categoriesRepository.Get(categoryId);
+            if (categoryDb is null)
             {
-                throw new Exception("Invalid Id");
+                throw new Exception("category not found");
             }
+            return _categoriesRepository.Delete(categoryDb);
+
         }
         #endregion Delete
 
